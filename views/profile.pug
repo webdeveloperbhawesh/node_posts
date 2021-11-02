@@ -1,0 +1,34 @@
+include ./header.pug
+
+div#profileDiv
+    div#profileImageDiv
+        if(result.profile.image)
+            img(src=`#{result.profile.image}`, alt="")
+        else 
+            img(src="/static/images/smiley.jpeg", alt="")
+    div#usernameProfile #{result.profile.username}
+    div#editProfileBtnDiv 
+        if(result.profile.username == result.user.username)
+            a#editProfileBtn(href="/settings")
+                <i class="fas fa-edit"></i> Edit setting 
+        else if result.user.followings.includes(String(result.profile._id))
+            a.followUserBtn(href="javascript:void(0);" data-user=result.profile.username) Following #{result.profile.username}
+        else
+            a.followUserBtn(href="javascript:void(0);" data-user=result.profile.username) + Follow #{result.profile.username}
+
+div#FeedsDiv
+    ul.nav.nav-tabs
+            li.nav-item
+                a.getMyFeeds.nav-link.active(data-toggle="tab" href="#my") Your Feeds
+            li.nav-item
+                a.getFavouritedFeeds.nav-link(data-toggle="tab" href="#favourites" ) Favorited Feeds
+
+    div.tab-content
+        div#my.tab-pane.fade.in.active.show
+            div.myFeedContentDiv Loading...
+            div.paginationDiv
+        div#favourites.tab-pane.fade
+            div.favoritedFeedContentDiv Loading...
+            div.paginationDiv
+
+include ./footer.pug

@@ -1,0 +1,24 @@
+html 
+    head 
+        meta(charset="utf-8")
+        title Conduit Home
+        link(rel='stylesheet', href='/static/style.css')
+        link(href="/static/css/bootstrap.min.css" ,rel="stylesheet")
+        link(href="/static/css/font-awesome.css" ,rel="stylesheet")
+    body 
+        div#upperHeader
+            div.leftAlign#upperTitle 
+                a(href="/") conduit
+            div.topnav
+                a.active(href="/") Home
+                if(result.user.username)
+                    a(href="/add-feed")
+                        <i class="fas fa-edit"></i> New Article
+                if(!result.user.username)
+                    a(href="/signin") Sign in
+                    a(href="/signup") Sign up
+                else 
+                    a(href="/settings") 
+                        <i class="fas fa-cog"></i> Settings
+                    a(href=`${'/profile/'+result.user.username}`)
+                        <i class="fas fa-user-alt"></i> #{result.user.username}

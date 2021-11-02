@@ -1,0 +1,95 @@
+include ./header.pug 
+
+- function changeDate(date){
+-  var formattedDate = formattedDate = new Date(date)
+- return formattedDate.getDate() + " " + formattedDate.toLocaleString('default', { month: 'long' }) + ' ' + formattedDate.getFullYear();
+-}
+div#viewFeedBanner
+    h1#viewFeedHeading #{result.feed.title} 
+    div.row
+        div.col-sm-1.col-md-1.marginRightMinus25
+            img.imgHeight30(src="/static/images/smiley.jpeg", alt="")
+        div.col-sm-2.col-md-2.marginLeftMinus25.marginTopMinus5
+            div
+                a.whiteColor(href=`${'/profile/'+result.feed.userData[0].username}`) #{result.feed.userData[0].username}
+            div.feedTime.greyColor #{changeDate(result.feed.createdAt)}
+        if result.user._id != result.feed.userData[0]._id
+            div.col-sm-2.col-md-2.marginRightMinus25
+                if result.user.followings && result.user.followings.includes(String(result.feed.userData[0]._id))
+                    a.followUserBtn(href="javascript:void(0)" data-user=result.feed.userData[0].username) Following #{result.feed.userData[0].username}
+                else 
+                    a.followUserBtn(href="javascript:void(0)" data-user=result.feed.userData[0].username) + Follow #{result.feed.userData[0].username}
+            div.col-sm-2.col-md-2.marginLeftMinus25
+                a.likeDiv.viewFeedLikeBtn(href="javascript:void(0)" id=`${result.feed._id}` onclick=`likeFeed('${result.feed._id}')`)
+                    <i class="fas fa-heart"></i> #{result.feed.likes.length}
+        else 
+            div.col-sm-2.col-md-2.marginRightMinus25
+                a.editFeedBtn.viewFeedBtnClass(href=`${'/edit-feed/'+result.feed._id}`)
+                    <i class="fas fa-edit"></i> Edit Feed
+            div.col-sm-2.col-md-2.marginLeftMinus25
+                 a.deleteFeedBtn.viewFeedBtnClass(href="javascript:void(0)" data-feed=result.feed._id)
+                    <i class="fas fa-trash"></i> Delete Feed
+
+div#viewFeedContent
+        div#viewFeedContentText #{result.feed.content}
+        div#viewFeedAllTags 
+            each tag in result.feed.tags 
+                span.tagClass.greyColor.fontSize12 #{tag}
+
+
+div#viewFeedFooter 
+    div.row
+        div.col-sm-4.col-md-4.marginRightMinus25.textRight
+            img.imgHeight30.borderRadius50(src="/static/images/smiley.jpeg", alt="")
+        div.col-sm-2.col-md-2.marginTopMinus5
+            div.textLeft
+                a.greenColor(href=`${'/profile/'+result.feed.userData[0].username}`) #{result.feed.userData[0].username}
+            div.feedTime.greyColor #{changeDate(result.feed.createdAt)}
+        if result.user._id != result.feed.userData[0]._id
+            div.col-sm-2.col-md-2.marginRightMinus25.textLeft
+                if result.user.followings && result.user.followings.includes(String(result.feed.userData[0]._id))
+                    a.followUserBtn(href="javascript:void(0)" data-user=result.feed.userData[0].username) Following #{result.feed.userData[0].username}
+                else 
+                    a.followUserBtn(href="javascript:void(0)" data-user=result.feed.userData[0].username) + Follow #{result.feed.userData[0].username}
+            div.col-sm-2.col-md-2.marginLeftMinus25
+                a.likeDiv.viewFeedLikeBtn(href="javascript:void(0)" id=`${result.feed._id}` onclick=`likeFeed('${result.feed._id}')`) 
+                    <i class="fas fa-heart"></i> #{result.feed.likes.length}
+        else 
+            div.col-sm-2.col-md-2.marginRightMinus25
+                a.editFeedBtn.viewFeedBtnClass(href=`${'/edit-feed/'+result.feed._id}`) 
+                    <i class="fas fa-edit"></i> Edit Feed
+            div.col-sm-2.col-md-2.marginLeftMinus25
+                 a.deleteFeedBtn.viewFeedBtnClass(href="javascript:void(0)" data-feed=result.feed._id)
+                    <i class="fas fa-trash"></i> Delete Feed
+    div#viewFeedLoginFirst
+        if(!result.user.username)
+            div 
+                a.greenColor(href="/signin") Sign in
+                |  or 
+                a.greenColor(href="/signup") sign up
+                |  to add comments on this article.
+        if(result.user.username)
+            div 
+                div.form-group
+                    p.apiErrorMsg 
+                    input(type="hidden" value=result.feed._id id="feed_id")
+                    textarea.form-control(placeholder="Write a comment..." name="comment" id="comment" ,  rows="3") 
+                    div#addCommentBottom 
+                        button#addCommentBtn Post comment
+        
+        each comment in result.feed.comments
+            if comment.userDet[0]
+                div.perCommentDiv
+                    div.perCommentText #{comment.comment}
+                    div.perCommentCreatedBy
+                        span 
+                            img.imgHeight20.imgBorderRadius(src="/static/images/smiley.jpeg", alt="")
+                        span
+                        a.perCommentUsername(href='/profile/'+comment.userDet[0].username) #{comment.userDet[0].username}
+                        span.perCommentDate #{ changeDate(comment.createdAt) }
+                        if(comment.userId == result.user._id)
+                            span 
+                                button.deleteCommentBtn(id=comment._id) 
+                                    <i class="fas fa-trash"></i>
+
+include ./footer.pug             

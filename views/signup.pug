@@ -1,0 +1,22 @@
+include ./header.pug 
+
+
+div#signUpformDiv
+    h1#signupHeading Sign up 
+    p#alreadyHaveAcc 
+        a(href="/signin") Have an account?
+    if(result.error)
+        for e in result.error
+            p.apiErrorMsg #{e}
+    form(action="/signup", method="post")
+        div.form-group
+            input.form-control(type="text",placeholder="Username", name="username")
+        div.form-group
+            input.form-control(type="email", placeholder="Email",name="email")
+        div.form-group
+            input.form-control(type="password" ,placeholder="Password",name="password")
+        button#signupBtn.btn.btn-primary(type="submit") Sign up
+    
+
+include ./footer.pug             
+ 

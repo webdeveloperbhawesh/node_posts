@@ -1,0 +1,20 @@
+include ./header.pug
+
+div#addFeedformDiv
+    if(result.error)
+        for e in result.error
+            p.apiErrorMsg #{e}
+    div#settingHeading
+    form(action="/add-feed", method="post")
+        div.form-group
+            input.form-control(type="text", placeholder="Article Title",name="title")
+        div.form-group
+            input.form-control(type="text" ,placeholder="What's this article about?",name="description")
+        div.form-group
+            textarea.form-control(placeholder="Write your article (in markdown)",name="content" ,  rows="5") 
+        div.form-group
+            input.form-control(type="text" ,placeholder="Enter comma separated tags",name="tags",data-role="tagsinput")
+        div.form-group
+            button#signupBtn.btn.btn-primary(type="submit") Add feed
+
+include ./footer.pug

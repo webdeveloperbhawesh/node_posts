@@ -1,0 +1,22 @@
+include ./header.pug
+div#contentBody
+    div#addFeedformDiv
+        if(result.error)
+            for e in result.error
+                p.apiErrorMsg #{e}
+        p#settingHeading Your Settings
+        form(action="/settings", method="post")
+            div.form-group
+                input.form-control(type="text", placeholder="URL of profile picture",name="image", value=result.user.image)
+            div.form-group
+                input.form-control(type="text" ,placeholder="Username",name="username", value=result.user.username)
+            div.form-group
+                textarea.form-control(placeholder="Short bio about you",name="bio" ,  rows="5", value=result.user.bio) #{result.user.bio} 
+            div.form-group
+                input.form-control(type="text" ,placeholder="Email",name="email" ,value=result.user.email)
+            div.form-group
+                input.form-control(type="password" ,placeholder="New password",name="password")
+            button#logoutBtn.btn.btn-primary.floatLeft(type="button" onclick="logout()") Logout
+            button#signupBtn.btn.btn-primary(type="submit") Update setting
+
+include ./footer.pug
